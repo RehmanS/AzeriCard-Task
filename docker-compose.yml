@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    image: eureka-server:latest
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: api-gateway:latest
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - eureka-server
+
+  security-service:
+    image: security-service:latest
+    ports:
+      - "11880:11880"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - eureka-server
+
+  product-service:
+    image: product-service:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - eureka-server
+
+  payment-service:
+    image: payment-service:latest
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - eureka-server
+
+  card-service:
+    image: card-service:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - eureka-server
+
+  security-service-db:
+      image: postgres:latest
+      environment:
+        POSTGRES_DB: security
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 123456789
+      ports:
+        - "5432:5432"
+
+  product-service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: product
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5432:5432"
+
+  payment-service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: payment
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5432:5432"
+
+  card-service-db:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: card
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+    ports:
+      - "5432:5432"
